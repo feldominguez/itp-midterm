@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Question 1</title>
+</head>
+<body>
+
+<script src="jquery-3.1.1.js"></script>
+<script src="handlebars-v4.0.5.js"></script>
+<script>
+  // Make an AJAX call to http://itp-api.herokuapp.com/api/v1/me and render the user's first name
+  // and last name in a span with a class of "fullname" using Handlebars. Also render the list of
+  // open source projects in an unordered list. The `isAdmin` flag is a boolean that randomly changes.
+  // If isAdmin is true, render 'Admin' next to the name. Otherwise, just render 'Not Admin' next
+  // to the name.
+  // Dont forget to run a local server when building this.
+  // cd into this directory and run php -S localhost:8000 and navigate to localhost:8000/question-1.html
+  function getInfo (){
+  var promise = $.getJSON({
+    url: "https://itp-api.herokuapp.com/api/v1/me"
+  })
+  return promise
+}
+
+
+getInfo().then(function(r){
+
+  console.log(r.data);
+    var templateSource = $('#list').html();
+    var template = Handlebars.compile(templateSource);
+    var html = template(r.data);
+    $('#results').html(html);
+})
+
+</script>
+
+<script id='list' type='template/handlebars'>
+<span class='fullname'>
+  {{ firstName}} {{lastName}}  {{#if isAdmin}}-> Admin{{else}} -> Not Admin{{/if}}
+  </span>
+
+
+<ul id='hello'>
+  {{#each this.openSourceProjects}}
+  <li> {{name}}</li>
+  {{/each}}
+</ul>
+
+</script>
+
+<div id='results'>
+
+</div>
+</body>
+
+
+</html>
